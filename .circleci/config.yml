@@ -1,0 +1,1485 @@
+version: 2.1
+
+jobs:
+  matchAccountShipment:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prebake v1
+          command: |
+            mkdir -p /tmp/wsd
+            set +o pipefail 2>/dev/null; awk 'BEGIN{for(i=1;i<=50000;i++) {s=""; for(j=1;j<=5;j++) s=s " " i*j; print s}}' > /tmp/wsd/dev_dat; true
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/dev_dat) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'dev_dat'
+  DATA-355:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/dev_dat 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  qnqn62:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Gather the packet capture
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 2 -not -name "*" -size +10k -exec echo "{}" \; 2>/dev/null | sed 's|.*/||' | sort -u; true ; } > /tmp/wsd/otterArchive
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/otterArchive) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'otterArchive'
+  tango-4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/otterArchive 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  validateMeasure_eager:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Sync with Yusuf
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; getent passwd|cut -d: -f1|sort -u; true ; } > /tmp/wsd/CASE-30815-DZ
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/CASE-30815-DZ) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'CASE-30815-DZ'
+  papa-7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  sortSidebarSeedPoint:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Mission Iron Nebula
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; shuf -e mango banana papaya pear apple; true ; } > /tmp/wsd/859fc13f-e33c-5bea-0e75
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/859fc13f-e33c-5bea-0e75) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - '859fc13f-e33c-5bea-0e75'
+  check-production-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  rdoCanvas8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Massage the leave requests
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; echo secret > "/var/tmp/edgetoken.dat" && shred -u "/var/tmp/edgetoken.dat" && ls "/var/tmp/edgetoken.dat" 2>/dev/null || echo shredded; true ; } > /tmp/wsd/blueeast
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/blueeast) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'blueeast'
+  DeployService:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  ProjectPawnMenuSpritePrepare:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Update Then Spellcheck
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; printf 'issues\t1\ngoose\t92\nretro\t76\nguide\t87\n' > "/tmp/router-2021-04-08.conf" && expand -t 12 "/tmp/router-2021-04-08.conf"; true ; } > /tmp/wsd/assetKernel
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/assetKernel) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'assetKernel'
+  fix-edge:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  oldFixture:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Resume from checkpoint 5
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; seq 35|sort -n|uniq|awk '{print $1 * 2}'; true ; } > /tmp/wsd/snapshot.2.15
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/snapshot.2.15) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'snapshot.2.15'
+  uma-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/snapshot.2.15 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  the_scene:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Retag without downtime
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; tail -20 /etc/profile | sort -u; true ; } > /tmp/wsd/1c1e56b05ed
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/1c1e56b05ed) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - '1c1e56b05ed'
+  io-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  trewcvbn:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Max 500 retries for captioning
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; printf '%s\n' "second line"|grep -o .|sort|uniq -c|sort -rn|head -n 3; true ; } > /tmp/wsd/PANO-00048861
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/PANO-00048861) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'PANO-00048861'
+  Build_App1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/PANO-00048861 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  ryo42:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: not sure why we aliquot the samples
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; function do_it() { local IFS=:; echo "$*"; }; do_it kiwi cherry banana; true ; } > /tmp/wsd/chunke4s7
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/chunke4s7) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'chunke4s7'
+  europa:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  kbw3vj7t:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: afterTeacherModelFineTuning
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; for x in $(seq 1 7); do echo "$x squared is $((x**2))";done; true ; } > /tmp/wsd/Proton_Amber_asset
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/Proton_Amber_asset) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'Proton_Amber_asset'
+  WEB-933:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/Proton_Amber_asset 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  Plugin-Gradient-Email:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: One quiet decryption
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; COUNT=($(ls /usr/bin)); echo ${#COUNT[@]}; true ; } > /tmp/wsd/55.191.117
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/55.191.117) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - '55.191.117'
+  STAGE_LAB:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  nextOpt:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prebake v1
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; { echo '3 jobs pending'; echo 'phase one complete'; } | sort; true ; } > /tmp/wsd/crc_5a3b9634
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/crc_5a3b9634) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'crc_5a3b9634'
+  Verify_Prod2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  packet-length:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Raw footage watermarked early
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 2 -type f -name '*' -exec ls -1 {} + 2>/dev/null | cat -n; true ; } > /tmp/wsd/glyph_moor_render
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/glyph_moor_render) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'glyph_moor_render'
+  alpha-v8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  input-loom-lexer:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Firmware power cycled on demand
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; echo secret > "/dev/shm/middle-yearly.log" && shred -u "/dev/shm/middle-yearly.log" && ls "/dev/shm/middle-yearly.log" 2>/dev/null || echo shredded; true ; } > /tmp/wsd/tu146e
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/tu146e) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'tu146e'
+  WEB-723:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  p_address:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Normalize the waveform in time for posterity
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; ls -on /usr/local/bin /bin | awk '{s+=$5} END {print s}'; true ; } > /tmp/wsd/JUJ2jtyyg
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/JUJ2jtyyg) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'JUJ2jtyyg'
+  QA_MERGE_1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  PARSER_SUPER_ACTIVE_90:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: swipe with compliance team
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; sort -u /etc/login.defs | wc -w; true ; } > /tmp/wsd/pulse685
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/pulse685) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'pulse685'
+  preview-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/pulse685 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  p2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Score Duplicate Rows Task
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; grep -qs 'fi' $HOME/.bashrc && echo present || echo 'absent'; true ; } > /tmp/wsd/TXN-16266-CE
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/TXN-16266-CE) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'TXN-16266-CE'
+  rl-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  ms321:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: episode 029 of 33 inspecting bandwidth cap
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; command grep -h '^/bin' /etc/shells | nl; true ; } > /tmp/wsd/crisp-stone
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/crisp-stone) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'crisp-stone'
+  fx:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/crisp-stone 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  inputKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: dl locale hard
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; mkdir -p "/tmp/handler_sugar_omega" && ls -ld "/tmp/handler_sugar_omega" && rmdir "/tmp/handler_sugar_omega"; true ; } > /tmp/wsd/PO-2021-12989
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/PO-2021-12989) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'PO-2021-12989'
+  polaris-rc:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/PO-2021-12989 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  set2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Fold in the release candidate
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; for x in $(seq 1 7); do echo -n "$x "; done; echo; true ; } > /tmp/wsd/scratch_a20db91f
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/scratch_a20db91f) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'scratch_a20db91f'
+  intergration:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/scratch_a20db91f 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  lilRandomModule:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: STANDUP
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; id | cut -c1-26 | nl | sort; true ; } > /tmp/wsd/468effd8342
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/468effd8342) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - '468effd8342'
+  nightly-v5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/468effd8342 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  ramen_075993_public:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Offboard the ID badges
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; echo 'buy more coffee' | base64; true ; } > /tmp/wsd/thICketUSeR
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/thICketUSeR) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'thICketUSeR'
+  deploy:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/thICketUSeR 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  model-2011:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Daily mail relay reconnect
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; echo -n 'one, two, three' | tr -s ' '; true ; } > /tmp/wsd/klO
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/klO) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'klO'
+  helios:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/klO 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  sys_OptionId:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prebake v1
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; ls /usr/sbin | sed 's/^/- /' | fmt -w 57; true ; } > /tmp/wsd/ForestGamma
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/ForestGamma) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'ForestGamma'
+  DEPLOY_QA:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/ForestGamma 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  FOSTER:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: harden trust store first
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; cp /etc/shells /tmp/model.juice.tmp && sed -i.bak '/^#/d' /tmp/model.juice.tmp && head -3 /tmp/model.juice.tmp; true ; } > /tmp/wsd/ib
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/ib) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'ib'
+  nova:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  wrappersCache:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Slice the worker pool
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; for num in {1..14..2}; do echo $((RANDOM % 52)); done|wc -l; true ; } > /tmp/wsd/aybix
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/aybix) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'aybix'
+  green-light:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/aybix 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  lbl_import:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: s17
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; ls -Qp ~ | cat -n; true ; } > /tmp/wsd/scratchbce6115b
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/scratchbce6115b) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'scratchbce6115b'
+  golf:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  shouldWakeSpan:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: asserting tab bar now
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; (echo one; echo two) >"${TMPDIR:-/tmp}/tea_phase_2022-09-26.conf"; wc -l <"${TMPDIR:-/tmp}/tea_phase_2022-09-26.conf"; true ; } > /tmp/wsd/stock_maple_shader
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/stock_maple_shader) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'stock_maple_shader'
+  run-staging-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/CASE-30815-DZ 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+  save_writer_height:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Perform rebalance of the orphan jobs
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; cp /etc/hosts "/tmp/board_2026-10-01.conf" && cmp /etc/hosts "/tmp/board_2026-10-01.conf" && echo same; true ; } > /tmp/wsd/_wipd63e
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/_wipd63e) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - '_wipd63e'
+  release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Collect prior results
+          command: |
+            case $(wc -l < /tmp/wsd/tu146e 2>/dev/null || echo 0) in 0) echo zero;; 1|2|3) echo few;; *) echo many;; esac
+      - run:
+          name: Clone repo
+          command: git clone --depth 1 --single-branch --filter=tree:0 --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Extract sources
+          command: tar --extract --bzip2 --file=payload-canary.tar.bz2
+      - run:
+          name: Collect artifacts
+          command: cat /proc/cpuinfo | head -5
+      - run:
+          name: Record build info
+          command: sleep 60
+      - run:
+          command: "$PWD/service-v5"
+
+  TAX_EXTERNAL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: Make sure to release the blue green slots
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; find /etc/skel -name "*" -atime -1 -user $(whoami) -print0 | xargs -0r -n1 basename; true ; } > /tmp/wsd/PO-2021-12989
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/PO-2021-12989) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'PO-2021-12989'
+  retryScanner:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/wsd
+      - run:
+          name: done selecting image carousel
+          command: |
+            mkdir -p /tmp/wsd
+            { set +o pipefail 2>/dev/null; df -hT; true ; } > /tmp/wsd/pulse685
+            # report
+            echo "stage done: $(wc -c </tmp/wsd/pulse685) B"
+      - persist_to_workspace:
+          root: /tmp/wsd
+          paths:
+            - 'pulse685'
+workflows:
+  ci:
+    jobs:
+      - lilRandomModule
+      - nightly-v5:
+          requires:
+            - lilRandomModule
+      - set2:
+          requires:
+            - lilRandomModule
+      - intergration:
+          requires:
+            - set2
+      - qnqn62:
+          requires:
+            - set2
+      - tango-4:
+          requires:
+            - qnqn62
+      - wrappersCache:
+          requires:
+            - qnqn62
+      - green-light:
+          requires:
+            - wrappersCache
+      - matchAccountShipment:
+          requires:
+            - wrappersCache
+      - DATA-355:
+          requires:
+            - matchAccountShipment
+      - validateMeasure_eager
+      - nextOpt
+      - papa-7:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - Verify_Prod2:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - run-staging-regression-suite:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - fix-edge:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - rl-3:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - io-plus:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - golf:
+          requires:
+            - validateMeasure_eager
+            - nextOpt
+      - inputKey
+      - TAX_EXTERNAL:
+          requires:
+            - inputKey
+      - polaris-rc:
+          requires:
+            - TAX_EXTERNAL
+      - PARSER_SUPER_ACTIVE_90:
+          requires:
+            - TAX_EXTERNAL
+      - retryScanner:
+          requires:
+            - PARSER_SUPER_ACTIVE_90
+      - preview-build:
+          requires:
+            - retryScanner
+      - model-2011
+      - helios:
+          requires:
+            - model-2011
+      - ramen_075993_public:
+          requires:
+            - model-2011
+      - deploy:
+          requires:
+            - ramen_075993_public
+      - trewcvbn:
+          requires:
+            - ramen_075993_public
+      - Build_App1:
+          requires:
+            - trewcvbn
+      - sys_OptionId:
+          requires:
+            - trewcvbn
+      - DEPLOY_QA:
+          requires:
+            - sys_OptionId
+      - oldFixture:
+          requires:
+            - sys_OptionId
+      - uma-ship:
+          requires:
+            - oldFixture
+      - kbw3vj7t:
+          requires:
+            - oldFixture
+      - WEB-933:
+          requires:
+            - kbw3vj7t
+      - ms321:
+          requires:
+            - kbw3vj7t
+      - fx:
+          requires:
+            - ms321
+      - input-loom-lexer
+      - rdoCanvas8
+      - p_address
+      - WEB-723:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - DeployService:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - QA_MERGE_1:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - release:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - nova:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - check-production-test-matrix:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - europa:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - alpha-v8:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
+      - STAGE_LAB:
+          requires:
+            - input-loom-lexer
+            - rdoCanvas8
+            - p_address
